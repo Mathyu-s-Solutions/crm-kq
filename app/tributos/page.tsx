@@ -244,12 +244,12 @@ export default function TributosPage() {
                           </div>
 
                           <div className="flex items-center justify-center">
-                            <AccordionTrigger className="p-0 hover:no-underline">
-                              <Button variant="outline" size="sm" className="gap-1">
+                            <AccordionTrigger className="p-0 hover:no-underline [&[data-state=open]>div>svg]:rotate-90">
+                              <div className="inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3">
                                 <span className="hidden sm:inline">Cronograma</span>
                                 <span className="sm:hidden">Ver</span>
                                 <ChevronRight className="h-4 w-4 transition-transform duration-200" />
-                              </Button>
+                              </div>
                             </AccordionTrigger>
                           </div>
                         </div>
