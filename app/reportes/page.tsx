@@ -72,70 +72,70 @@ export default function ReportesPage() {
         }
       />
       
-      <div className="flex-1 p-6 space-y-6">
+      <div className="flex-1 p-4 sm:p-6 space-y-4 sm:space-y-6">
         {/* KPIs principales */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4">
           <Card>
-            <CardContent className="pt-4">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Users className="h-5 w-5 text-primary" />
+            <CardContent className="pt-3 sm:pt-4 px-3 sm:px-6">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                  <Users className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">45</p>
-                  <p className="text-xs text-muted-foreground">Clientes Activos</p>
+                  <p className="text-lg sm:text-2xl font-bold">45</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">Clientes Activos</p>
                 </div>
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="pt-4">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-lg bg-green-100 flex items-center justify-center">
-                  <CheckCircle2 className="h-5 w-5 text-green-600" />
+            <CardContent className="pt-3 sm:pt-4 px-3 sm:px-6">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg bg-green-100 flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">42</p>
-                  <p className="text-xs text-muted-foreground">Declaraciones</p>
+                  <p className="text-lg sm:text-2xl font-bold">42</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">Declaraciones</p>
                 </div>
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="pt-4">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-lg bg-yellow-100 flex items-center justify-center">
-                  <Clock className="h-5 w-5 text-yellow-600" />
+            <CardContent className="pt-3 sm:pt-4 px-3 sm:px-6">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg bg-yellow-100 flex items-center justify-center shrink-0">
+                  <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">8</p>
-                  <p className="text-xs text-muted-foreground">Pendientes</p>
+                  <p className="text-lg sm:text-2xl font-bold">8</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">Pendientes</p>
                 </div>
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="pt-4">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                  <Briefcase className="h-5 w-5 text-blue-600" />
+            <CardContent className="pt-3 sm:pt-4 px-3 sm:px-6">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
+                  <Briefcase className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">25</p>
-                  <p className="text-xs text-muted-foreground">Asesorías</p>
+                  <p className="text-lg sm:text-2xl font-bold">25</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">Asesorías</p>
                 </div>
               </div>
             </CardContent>
           </Card>
-          <Card>
-            <CardContent className="pt-4">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-lg bg-emerald-100 flex items-center justify-center">
-                  <CreditCard className="h-5 w-5 text-emerald-600" />
+          <Card className="col-span-2 sm:col-span-1">
+            <CardContent className="pt-3 sm:pt-4 px-3 sm:px-6">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0">
+                  <CreditCard className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">S/ 38.5k</p>
-                  <p className="text-xs text-muted-foreground">Cobranzas</p>
+                  <p className="text-lg sm:text-2xl font-bold">S/ 38.5k</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">Cobranzas</p>
                 </div>
               </div>
             </CardContent>
@@ -145,12 +145,12 @@ export default function ReportesPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Distribución por Plan */}
           <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
+            <CardHeader className="pb-2 sm:pb-4">
+              <CardTitle className="text-sm sm:text-base flex items-center gap-2">
                 <BarChart3 className="h-4 w-4" />
                 Distribución por Plan
               </CardTitle>
-              <CardDescription>Clientes según plan de servicio</CardDescription>
+              <CardDescription className="text-xs sm:text-sm">Clientes según plan de servicio</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {clientesPorPlan.map((item) => (
@@ -178,12 +178,12 @@ export default function ReportesPage() {
 
           {/* Distribución por Régimen */}
           <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
+            <CardHeader className="pb-2 sm:pb-4">
+              <CardTitle className="text-sm sm:text-base flex items-center gap-2">
                 <FileText className="h-4 w-4" />
                 Distribución por Régimen
               </CardTitle>
-              <CardDescription>Clientes según régimen tributario</CardDescription>
+              <CardDescription className="text-xs sm:text-sm">Clientes según régimen tributario</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {clientesPorRegimen.map((item) => (
@@ -210,26 +210,26 @@ export default function ReportesPage() {
 
           {/* Estado de Declaraciones */}
           <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Estado de Declaraciones</CardTitle>
-              <CardDescription>Enero 2025</CardDescription>
+            <CardHeader className="pb-2 sm:pb-4">
+              <CardTitle className="text-sm sm:text-base">Estado de Declaraciones</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">Enero 2025</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                <div className="text-center p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                  <Clock className="h-6 w-6 text-yellow-600 mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-yellow-600">8</p>
-                  <p className="text-xs text-muted-foreground">Pendientes</p>
+              <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4">
+                <div className="text-center p-2 sm:p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-600 mx-auto mb-1 sm:mb-2" />
+                  <p className="text-lg sm:text-2xl font-bold text-yellow-600">8</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">Pendientes</p>
                 </div>
-                <div className="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <TrendingUp className="h-6 w-6 text-blue-600 mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-blue-600">5</p>
-                  <p className="text-xs text-muted-foreground">En Proceso</p>
+                <div className="text-center p-2 sm:p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600 mx-auto mb-1 sm:mb-2" />
+                  <p className="text-lg sm:text-2xl font-bold text-blue-600">5</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">En Proceso</p>
                 </div>
-                <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
-                  <CheckCircle2 className="h-6 w-6 text-green-600 mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-green-600">42</p>
-                  <p className="text-xs text-muted-foreground">Presentadas</p>
+                <div className="text-center p-2 sm:p-4 bg-green-50 rounded-lg border border-green-200">
+                  <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6 text-green-600 mx-auto mb-1 sm:mb-2" />
+                  <p className="text-lg sm:text-2xl font-bold text-green-600">42</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">Presentadas</p>
                 </div>
               </div>
               <div className="space-y-2">
@@ -248,23 +248,23 @@ export default function ReportesPage() {
 
           {/* Estado de Cobranzas */}
           <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Estado de Cobranzas</CardTitle>
-              <CardDescription>Diciembre 2024</CardDescription>
+            <CardHeader className="pb-2 sm:pb-4">
+              <CardTitle className="text-sm sm:text-base">Estado de Cobranzas</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">Diciembre 2024</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                <div className="text-center p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                  <p className="text-xl font-bold text-yellow-600">S/ 2,100</p>
-                  <p className="text-xs text-muted-foreground">Pendiente</p>
+              <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4">
+                <div className="text-center p-2 sm:p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                  <p className="text-sm sm:text-xl font-bold text-yellow-600">S/ 2,100</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">Pendiente</p>
                 </div>
-                <div className="text-center p-4 bg-red-50 rounded-lg border border-red-200">
-                  <p className="text-xl font-bold text-red-600">S/ 1,850</p>
-                  <p className="text-xs text-muted-foreground">Vencido</p>
+                <div className="text-center p-2 sm:p-4 bg-red-50 rounded-lg border border-red-200">
+                  <p className="text-sm sm:text-xl font-bold text-red-600">S/ 1,850</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">Vencido</p>
                 </div>
-                <div className="text-center p-4 bg-green-50 rounded-lg border border-green-200">
-                  <p className="text-xl font-bold text-green-600">S/ 38,500</p>
-                  <p className="text-xs text-muted-foreground">Cobrado</p>
+                <div className="text-center p-2 sm:p-4 bg-green-50 rounded-lg border border-green-200">
+                  <p className="text-sm sm:text-xl font-bold text-green-600">S/ 38,500</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">Cobrado</p>
                 </div>
               </div>
               <div className="pt-4 border-t">
@@ -282,15 +282,15 @@ export default function ReportesPage() {
 
         {/* Alertas y Pendientes */}
         <Card>
-          <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
+          <CardHeader className="pb-2 sm:pb-4">
+            <CardTitle className="text-sm sm:text-base flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-warning" />
               Alertas y Pendientes
             </CardTitle>
-            <CardDescription>Situaciones que requieren atención</CardDescription>
+            <CardDescription className="text-xs sm:text-sm">Situaciones que requieren atención</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               {alertas.map((alerta, idx) => (
                 <div 
                   key={idx}

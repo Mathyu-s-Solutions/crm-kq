@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
+import { MobileSidebar } from './Sidebar';
 
 interface HeaderProps {
   title: string;
@@ -21,28 +22,31 @@ interface HeaderProps {
 
 export default function Header({ title, subtitle, actions }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6">
-      <div>
-        <h1 className="text-xl font-semibold text-foreground">{title}</h1>
-        {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+    <header className="sticky top-0 z-30 flex h-14 sm:h-16 items-center justify-between border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 sm:px-6 gap-4">
+      <div className="flex items-center gap-3">
+        <MobileSidebar />
+        <div className="min-w-0">
+          <h1 className="text-lg sm:text-xl font-semibold text-foreground truncate">{title}</h1>
+          {subtitle && <p className="text-xs sm:text-sm text-muted-foreground truncate hidden sm:block">{subtitle}</p>}
+        </div>
       </div>
 
-      <div className="flex items-center gap-3">
-        {/* Search */}
+      <div className="flex items-center gap-2 sm:gap-3">
+        {/* Search - hidden on mobile */}
         <div className="relative hidden md:block">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Buscar clientes, RUC..."
-            className="w-64 pl-9 bg-muted/50 border-0 focus-visible:ring-1"
+            placeholder="Buscar..."
+            className="w-48 lg:w-64 pl-9 bg-muted/50 border-0 focus-visible:ring-1"
           />
         </div>
 
         {/* Quick Actions */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="sm" className="gap-2">
+            <Button size="sm" className="gap-2 hidden sm:flex">
               <Plus className="h-4 w-4" />
-              <span className="hidden sm:inline">Nuevo</span>
+              <span className="hidden lg:inline">Nuevo</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
@@ -58,27 +62,27 @@ export default function Header({ title, subtitle, actions }: HeaderProps) {
         {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative">
+            <Button variant="ghost" size="icon" className="relative h-9 w-9">
               <Bell className="h-5 w-5" />
               <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-[10px]">
                 5
               </Badge>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-80">
+          <DropdownMenuContent align="end" className="w-72 sm:w-80">
             <DropdownMenuLabel className="flex items-center justify-between">
               Notificaciones
               <Badge variant="secondary" className="text-xs">5 nuevas</Badge>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <div className="max-h-80 overflow-y-auto">
+            <div className="max-h-60 sm:max-h-80 overflow-y-auto">
               <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 cursor-pointer">
                 <div className="flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-destructive" />
                   <span className="font-medium text-sm">Cobranza vencida</span>
                 </div>
                 <p className="text-xs text-muted-foreground pl-4">
-                  Empresa ABC S.A.C. - S/ 850 pendiente
+                  Empresa ABC S.A.C. - S/ 850
                 </p>
               </DropdownMenuItem>
               <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 cursor-pointer">
@@ -87,23 +91,10 @@ export default function Header({ title, subtitle, actions }: HeaderProps) {
                   <span className="font-medium text-sm">Tope de ventas</span>
                 </div>
                 <p className="text-xs text-muted-foreground pl-4">
-                  Comercial XYZ al 85% del tope RUS
-                </p>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex flex-col items-start gap-1 p-3 cursor-pointer">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-info" />
-                  <span className="font-medium text-sm">Vencimiento próximo</span>
-                </div>
-                <p className="text-xs text-muted-foreground pl-4">
-                  PDT 621 vence en 3 días - 5 clientes
+                  Comercial XYZ al 85% del tope
                 </p>
               </DropdownMenuItem>
             </div>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="justify-center text-primary font-medium">
-              Ver todas las notificaciones
-            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 

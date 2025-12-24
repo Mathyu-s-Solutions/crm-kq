@@ -17,6 +17,7 @@ import type { Cliente, RegimenTributario, PlanServicio } from '@/types';
 const clientesEjemplo: Cliente[] = [
   { id: '1', ruc: '20123456789', razonSocial: 'Empresa ABC S.A.C.', titulares: ['Juan Pérez'], email: 'contacto@empresaabc.com', telefono: '999888777', regimenTributario: 'MYPE', regimenLaboral: 'PEQUEÑA', planServicio: 'ESTANDAR', fechaCreacion: new Date(), activo: true },
   { id: '2', ruc: '20987654321', razonSocial: 'Comercial XYZ E.I.R.L.', titulares: ['María García'], email: 'info@comercialxyz.pe', telefono: '998877665', regimenTributario: 'RUS', regimenLaboral: 'MICRO', planServicio: 'BASICO', fechaCreacion: new Date(), activo: true },
+  { id: '3', ruc: '20456789123', razonSocial: 'Servicios 123 S.A.', titulares: ['Carlos López'], email: 'admin@servicios123.com', telefono: '997766554', regimenTributario: 'GENERAL', regimenLaboral: 'GENERAL', planServicio: 'PREMIUM', fechaCreacion: new Date(), activo: true },
 ];
 
 const regimenConfig: Record<RegimenTributario, { label: string; color: string }> = {
@@ -38,42 +39,111 @@ export default function ClientesPage() {
   const [filtroRegimen, setFiltroRegimen] = useState<string>('all');
 
   const clientesFiltrados = clientesEjemplo.filter((c) => {
-    const matchBusqueda = c.razonSocial.toLowerCase().includes(busqueda.toLowerCase());
+    const matchBusqueda = c.razonSocial.toLowerCase().includes(busqueda.toLowerCase()) || c.ruc.includes(busqueda);
     const matchRegimen = filtroRegimen === 'all' || c.regimenTributario === filtroRegimen;
     return matchBusqueda && matchRegimen;
   });
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header title="Clientes" subtitle={`${clientesFiltrados.length} clientes`} 
-        actions={<Button asChild><Link href="/clientes/nuevo"><UserPlus className="h-4 w-4 mr-2" />Nuevo</Link></Button>} />
-      <div className="flex-1 p-6 space-y-4">
+      <Header 
+        title="Clientes" 
+        subtitle={`${clientesFiltrados.length} clientes`}
+        actions={
+          <Button asChild size="sm" className="hidden sm:flex">
+            <Link href="/clientes/nuevo"><UserPlus className="h-4 w-4 mr-2" />Nuevo</Link>
+          </Button>
+        }
+      />
+      
+      <div className="flex-1 p-4 sm:p-6 space-y-4">
+        {/* Mobile: Floating action button */}
+        <Button asChild size="icon" className="fixed bottom-4 right-4 h-14 w-14 rounded-full shadow-lg sm:hidden z-50">
+          <Link href="/clientes/nuevo"><UserPlus className="h-6 w-6" /></Link>
+        </Button>
+
+        {/* Filtros */}
         <Card>
-          <CardContent className="p-4 flex gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Buscar..." value={busqueda} onChange={(e) => setBusqueda(e.target.value)} className="pl-9" />
+          <CardContent className="p-3 sm:p-4">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input placeholder="Buscar..." value={busqueda} onChange={(e) => setBusqueda(e.target.value)} className="pl-9" />
+              </div>
+              <Select value={filtroRegimen} onValueChange={setFiltroRegimen}>
+                <SelectTrigger className="w-full sm:w-[160px]">
+                  <Filter className="h-4 w-4 mr-2" /><SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos</SelectItem>
+                  <SelectItem value="RUS">RUS</SelectItem>
+                  <SelectItem value="RER">RER</SelectItem>
+                  <SelectItem value="MYPE">MYPE</SelectItem>
+                  <SelectItem value="GENERAL">General</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-            <Select value={filtroRegimen} onValueChange={setFiltroRegimen}>
-              <SelectTrigger className="w-[160px]"><Filter className="h-4 w-4 mr-2" /><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="RUS">RUS</SelectItem>
-                <SelectItem value="MYPE">MYPE</SelectItem>
-              </SelectContent>
-            </Select>
           </CardContent>
         </Card>
-        <Card>
+
+        {/* Mobile: Card list */}
+        <div className="space-y-3 sm:hidden">
+          {clientesFiltrados.map((c) => (
+            <Card key={c.id}>
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Avatar className="h-10 w-10 shrink-0">
+                      <AvatarFallback className="bg-primary/10 text-primary text-sm">
+                        {c.razonSocial.substring(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0">
+                      <Link href={`/clientes/${c.id}`} className="font-medium text-sm hover:text-primary block truncate">
+                        {c.razonSocial}
+                      </Link>
+                      <p className="text-xs text-muted-foreground font-mono">{c.ruc}</p>
+                    </div>
+                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild><Link href={`/clientes/${c.id}`}><Eye className="h-4 w-4 mr-2" />Ver</Link></DropdownMenuItem>
+                      <DropdownMenuItem asChild><Link href={`/clientes/${c.id}/editar`}><Pencil className="h-4 w-4 mr-2" />Editar</Link></DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild><a href={`tel:${c.telefono}`}><Phone className="h-4 w-4 mr-2" />Llamar</a></DropdownMenuItem>
+                      <DropdownMenuItem asChild><a href={`mailto:${c.email}`}><Mail className="h-4 w-4 mr-2" />Email</a></DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+                <div className="flex items-center gap-2 mt-3">
+                  <Badge variant="outline" className={regimenConfig[c.regimenTributario].color}>
+                    {regimenConfig[c.regimenTributario].label}
+                  </Badge>
+                  <Badge variant="secondary" className={planConfig[c.planServicio].color}>
+                    {planConfig[c.planServicio].label}
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Desktop: Table */}
+        <Card className="hidden sm:block">
           <CardContent className="p-0">
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/50">
                   <TableHead>Cliente</TableHead>
-                  <TableHead>RUC</TableHead>
+                  <TableHead className="hidden md:table-cell">RUC</TableHead>
                   <TableHead>Régimen</TableHead>
-                  <TableHead>Plan</TableHead>
-                  <TableHead>Contacto</TableHead>
+                  <TableHead className="hidden lg:table-cell">Plan</TableHead>
+                  <TableHead className="hidden md:table-cell">Contacto</TableHead>
                   <TableHead className="text-right">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
@@ -82,31 +152,33 @@ export default function ClientesPage() {
                   <TableRow key={c.id}>
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        <Avatar className="h-10 w-10">
-                          <AvatarFallback className="bg-primary/10 text-primary">
+                        <Avatar className="h-9 w-9">
+                          <AvatarFallback className="bg-primary/10 text-primary text-sm">
                             {c.razonSocial.substring(0, 2).toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
-                        <div>
-                          <Link href={`/clientes/${c.id}`} className="font-medium hover:text-primary">
+                        <div className="min-w-0">
+                          <Link href={`/clientes/${c.id}`} className="font-medium hover:text-primary block truncate max-w-[200px]">
                             {c.razonSocial}
                           </Link>
-                          <p className="text-xs text-muted-foreground">{c.titulares.join(', ')}</p>
+                          <p className="text-xs text-muted-foreground truncate md:hidden">{c.ruc}</p>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell><code className="text-sm bg-muted px-2 py-1 rounded">{c.ruc}</code></TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      <code className="text-sm bg-muted px-2 py-1 rounded">{c.ruc}</code>
+                    </TableCell>
                     <TableCell>
                       <Badge variant="outline" className={regimenConfig[c.regimenTributario].color}>
                         {regimenConfig[c.regimenTributario].label}
                       </Badge>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="hidden lg:table-cell">
                       <Badge variant="secondary" className={planConfig[c.planServicio].color}>
                         {planConfig[c.planServicio].label}
                       </Badge>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="hidden md:table-cell">
                       <div className="flex gap-1">
                         <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
                           <a href={`tel:${c.telefono}`}><Phone className="h-4 w-4" /></a>
@@ -126,12 +198,8 @@ export default function ClientesPage() {
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem asChild>
-                            <Link href={`/clientes/${c.id}`}><Eye className="h-4 w-4 mr-2" />Ver</Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem asChild>
-                            <Link href={`/clientes/${c.id}/editar`}><Pencil className="h-4 w-4 mr-2" />Editar</Link>
-                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild><Link href={`/clientes/${c.id}`}><Eye className="h-4 w-4 mr-2" />Ver</Link></DropdownMenuItem>
+                          <DropdownMenuItem asChild><Link href={`/clientes/${c.id}/editar`}><Pencil className="h-4 w-4 mr-2" />Editar</Link></DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -139,14 +207,15 @@ export default function ClientesPage() {
                 ))}
               </TableBody>
             </Table>
-            {clientesFiltrados.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-12">
-                <Building2 className="h-12 w-12 text-muted-foreground/50 mb-4" />
-                <p className="text-muted-foreground">No se encontraron clientes</p>
-              </div>
-            )}
           </CardContent>
         </Card>
+
+        {clientesFiltrados.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-12">
+            <Building2 className="h-12 w-12 text-muted-foreground/50 mb-4" />
+            <p className="text-muted-foreground">No se encontraron clientes</p>
+          </div>
+        )}
       </div>
     </div>
   );

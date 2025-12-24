@@ -38,7 +38,7 @@ export default function NuevoClientePage() {
         subtitle="Registrar un nuevo cliente en el sistema"
       />
       
-      <div className="flex-1 p-6">
+      <div className="flex-1 p-4 sm:p-6">
         <div className="mb-4">
           <Button variant="ghost" size="sm" asChild>
             <Link href="/clientes" className="gap-2 text-muted-foreground">
@@ -48,20 +48,20 @@ export default function NuevoClientePage() {
           </Button>
         </div>
 
-        <form onSubmit={handleSubmit} className="max-w-3xl mx-auto space-y-6">
+        <form onSubmit={handleSubmit} className="max-w-3xl mx-auto space-y-4 sm:space-y-6">
           {/* Datos de la Empresa */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Building2 className="h-5 w-5 text-primary" />
+            <CardHeader className="pb-2 sm:pb-4">
+              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                <Building2 className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                 Datos de la Empresa
               </CardTitle>
-              <CardDescription>Información principal del cliente</CardDescription>
+              <CardDescription className="text-xs sm:text-sm">Información principal del cliente</CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <CardContent className="grid gap-3 sm:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="ruc">RUC *</Label>
+                  <Label htmlFor="ruc" className="text-sm">RUC *</Label>
                   <Input 
                     id="ruc" 
                     placeholder="20123456789" 
@@ -70,7 +70,7 @@ export default function NuevoClientePage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="razonSocial">Razón Social *</Label>
+                  <Label htmlFor="razonSocial" className="text-sm">Razón Social *</Label>
                   <Input 
                     id="razonSocial" 
                     placeholder="Empresa S.A.C."
@@ -79,14 +79,14 @@ export default function NuevoClientePage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="titulares">Titulares / Representantes</Label>
+                <Label htmlFor="titulares" className="text-sm">Titulares / Representantes</Label>
                 <Input 
                   id="titulares" 
                   placeholder="Juan Pérez, María García"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="direccion">Dirección</Label>
+                <Label htmlFor="direccion" className="text-sm">Dirección</Label>
                 <Input 
                   id="direccion" 
                   placeholder="Av. Principal 123, Lima"
@@ -97,16 +97,16 @@ export default function NuevoClientePage() {
 
           {/* Contacto */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <User className="h-5 w-5 text-primary" />
+            <CardHeader className="pb-2 sm:pb-4">
+              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                <User className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                 Información de Contacto
               </CardTitle>
             </CardHeader>
-            <CardContent className="grid gap-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <CardContent className="grid gap-3 sm:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Correo Electrónico</Label>
+                  <Label htmlFor="email" className="text-sm">Correo Electrónico</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input 
@@ -118,7 +118,7 @@ export default function NuevoClientePage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="telefono">Teléfono</Label>
+                  <Label htmlFor="telefono" className="text-sm">Teléfono</Label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input 
@@ -134,19 +134,19 @@ export default function NuevoClientePage() {
 
           {/* Régimen y Plan */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <FileText className="h-5 w-5 text-primary" />
+            <CardHeader className="pb-2 sm:pb-4">
+              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                 Régimen y Plan de Servicio
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-xs sm:text-sm">
                 El sistema desplegará automáticamente las obligaciones según el régimen seleccionado
               </CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <CardContent className="grid gap-3 sm:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div className="space-y-2">
-                  <Label>Régimen Tributario *</Label>
+                  <Label className="text-sm">Régimen Tributario *</Label>
                   <Select required>
                     <SelectTrigger>
                       <SelectValue placeholder="Seleccionar régimen" />
@@ -160,7 +160,7 @@ export default function NuevoClientePage() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Régimen Laboral</Label>
+                  <Label className="text-sm">Régimen Laboral</Label>
                   <Select>
                     <SelectTrigger>
                       <SelectValue placeholder="Seleccionar régimen" />
@@ -175,7 +175,7 @@ export default function NuevoClientePage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>Plan de Servicio *</Label>
+                <Label className="text-sm">Plan de Servicio *</Label>
                 <Select required>
                   <SelectTrigger>
                     <SelectValue placeholder="Seleccionar plan" />
@@ -213,15 +213,15 @@ export default function NuevoClientePage() {
 
           {/* Información Adicional */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Briefcase className="h-5 w-5 text-primary" />
+            <CardHeader className="pb-2 sm:pb-4">
+              <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                <Briefcase className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                 Información Adicional
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <Label htmlFor="otrosRegistros">Otros Registros y Observaciones</Label>
+                <Label htmlFor="otrosRegistros" className="text-sm">Otros Registros y Observaciones</Label>
                 <Textarea 
                   id="otrosRegistros"
                   placeholder="Registro REMYPE, observaciones especiales, etc."
@@ -232,11 +232,11 @@ export default function NuevoClientePage() {
           </Card>
 
           {/* Acciones */}
-          <div className="flex justify-end gap-3 pt-4">
-            <Button type="button" variant="outline" asChild>
+          <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4">
+            <Button type="button" variant="outline" asChild className="w-full sm:w-auto">
               <Link href="/clientes">Cancelar</Link>
             </Button>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading} className="w-full sm:w-auto">
               {isLoading ? 'Guardando...' : 'Guardar Cliente'}
             </Button>
           </div>

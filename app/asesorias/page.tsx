@@ -185,50 +185,50 @@ export default function AsesoriasPage() {
         }
       />
       
-      <div className="flex-1 p-6 space-y-6">
+      <div className="flex-1 p-4 sm:p-6 space-y-4 sm:space-y-6">
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           <Card className="border-l-4 border-l-primary">
-            <CardContent className="pt-4">
+            <CardContent className="pt-3 sm:pt-4 px-3 sm:px-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Programadas</p>
-                  <p className="text-2xl font-bold text-primary">{totalProgramadas}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Programadas</p>
+                  <p className="text-lg sm:text-2xl font-bold text-primary">{totalProgramadas}</p>
                 </div>
-                <Calendar className="h-8 w-8 text-primary/50" />
+                <Calendar className="h-6 w-6 sm:h-8 sm:w-8 text-primary/50" />
               </div>
             </CardContent>
           </Card>
           <Card className="border-l-4 border-l-green-500">
-            <CardContent className="pt-4">
+            <CardContent className="pt-3 sm:pt-4 px-3 sm:px-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Realizadas (mes)</p>
-                  <p className="text-2xl font-bold text-green-600">{totalRealizadas}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Realizadas (mes)</p>
+                  <p className="text-lg sm:text-2xl font-bold text-green-600">{totalRealizadas}</p>
                 </div>
-                <CheckCircle2 className="h-8 w-8 text-green-500/50" />
+                <CheckCircle2 className="h-6 w-6 sm:h-8 sm:w-8 text-green-500/50" />
               </div>
             </CardContent>
           </Card>
           <Card className="border-l-4 border-l-orange-500">
-            <CardContent className="pt-4">
+            <CardContent className="pt-3 sm:pt-4 px-3 sm:px-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Sin Disponibilidad</p>
-                  <p className="text-2xl font-bold text-orange-600">{clientesSinDisponibilidad}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Sin Disponibilidad</p>
+                  <p className="text-lg sm:text-2xl font-bold text-orange-600">{clientesSinDisponibilidad}</p>
                 </div>
-                <AlertCircle className="h-8 w-8 text-orange-500/50" />
+                <AlertCircle className="h-6 w-6 sm:h-8 sm:w-8 text-orange-500/50" />
               </div>
             </CardContent>
           </Card>
           <Card className="border-l-4 border-l-blue-500">
-            <CardContent className="pt-4">
+            <CardContent className="pt-3 sm:pt-4 px-3 sm:px-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Horas Totales</p>
-                  <p className="text-2xl font-bold text-blue-600">12.5h</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Horas Totales</p>
+                  <p className="text-lg sm:text-2xl font-bold text-blue-600">12.5h</p>
                 </div>
-                <Clock className="h-8 w-8 text-blue-500/50" />
+                <Clock className="h-6 w-6 sm:h-8 sm:w-8 text-blue-500/50" />
               </div>
             </CardContent>
           </Card>
@@ -258,61 +258,66 @@ export default function AsesoriasPage() {
 
               return (
                 <Card key={cliente.id} className={sinDisponibilidad ? 'border-orange-200 bg-orange-50/30' : ''}>
-                  <CardContent className="p-5">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                      <div className="flex items-center gap-4">
-                        <Avatar className="h-12 w-12">
-                          <AvatarFallback className="bg-primary/10 text-primary font-medium">
+                  <CardContent className="p-4 sm:p-5">
+                    <div className="flex flex-col gap-4">
+                      {/* Header */}
+                      <div className="flex items-start sm:items-center gap-3 sm:gap-4">
+                        <Avatar className="h-10 w-10 sm:h-12 sm:w-12 shrink-0">
+                          <AvatarFallback className="bg-primary/10 text-primary font-medium text-sm sm:text-base">
                             {getInitials(cliente.nombre)}
                           </AvatarFallback>
                         </Avatar>
-                        <div>
-                          <Link href={`/clientes/${cliente.id}`} className="font-semibold hover:text-primary transition-colors">
+                        <div className="flex-1 min-w-0">
+                          <Link href={`/clientes/${cliente.id}`} className="font-semibold hover:text-primary transition-colors text-sm sm:text-base">
                             {cliente.nombre}
                           </Link>
-                          <div className="flex items-center gap-2 mt-1">
+                          <div className="flex flex-wrap items-center gap-2 mt-1">
                             <code className="text-xs bg-muted px-2 py-0.5 rounded">{cliente.ruc}</code>
-                            <Badge variant="secondary" className={config.color}>
+                            <Badge variant="secondary" className={`${config.color} text-xs`}>
                               {config.label}
                             </Badge>
                           </div>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-6">
-                        <div className="text-center min-w-[120px]">
+                      {/* Stats row */}
+                      <div className="grid grid-cols-3 gap-2 sm:gap-4">
+                        <div className="text-center p-2 sm:p-3 bg-muted/30 rounded-lg">
                           <div className="flex items-center justify-center gap-1 mb-1">
-                            <span className="text-xl font-bold">{cliente.asesoriasUsadas}</span>
-                            <span className="text-muted-foreground">/</span>
-                            <span className="text-xl font-bold">{cliente.asesoriasDisponibles}</span>
+                            <span className="text-base sm:text-xl font-bold">{cliente.asesoriasUsadas}</span>
+                            <span className="text-muted-foreground text-sm">/</span>
+                            <span className="text-base sm:text-xl font-bold">{cliente.asesoriasDisponibles}</span>
                           </div>
                           <Progress 
                             value={progreso} 
                             className={`h-2 ${sinDisponibilidad ? '[&>div]:bg-orange-500' : ''}`}
                           />
-                          <p className="text-xs text-muted-foreground mt-1">Asesorías usadas</p>
+                          <p className="text-xs text-muted-foreground mt-1">Asesorías</p>
                         </div>
 
                         {cliente.proximaAsesoria ? (
-                          <div className="text-center p-3 bg-primary/5 rounded-lg border border-primary/20 min-w-[140px]">
+                          <div className="text-center p-2 sm:p-3 bg-primary/5 rounded-lg border border-primary/20">
                             <p className="text-xs text-muted-foreground">Próxima</p>
-                            <p className="font-semibold text-sm">{cliente.proximaAsesoria.fecha}</p>
+                            <p className="font-semibold text-xs sm:text-sm">{cliente.proximaAsesoria.fecha}</p>
                             <p className="text-xs text-primary">{cliente.proximaAsesoria.hora}</p>
                           </div>
                         ) : (
-                          <div className="text-center p-3 bg-muted/50 rounded-lg min-w-[140px]">
+                          <div className="text-center p-2 sm:p-3 bg-muted/50 rounded-lg">
                             <p className="text-xs text-muted-foreground">Sin asesorías</p>
-                            <p className="text-sm">programadas</p>
+                            <p className="text-xs sm:text-sm">programadas</p>
                           </div>
                         )}
 
-                        <Button 
-                          variant={sinDisponibilidad ? 'outline' : 'default'}
-                          size="sm"
-                          disabled={sinDisponibilidad}
-                        >
-                          {sinDisponibilidad ? 'Sin cupo' : 'Agendar'}
-                        </Button>
+                        <div className="flex items-center justify-center">
+                          <Button 
+                            variant={sinDisponibilidad ? 'outline' : 'default'}
+                            size="sm"
+                            disabled={sinDisponibilidad}
+                            className="w-full sm:w-auto text-xs sm:text-sm"
+                          >
+                            {sinDisponibilidad ? 'Sin cupo' : 'Agendar'}
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </CardContent>
@@ -322,16 +327,16 @@ export default function AsesoriasPage() {
           </div>
 
           {/* Historial */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
+          <Card className="lg:col-span-1">
+            <CardHeader className="pb-2 sm:pb-4">
+              <CardTitle className="text-sm sm:text-base flex items-center gap-2">
                 <Briefcase className="h-4 w-4" />
                 Historial Reciente
               </CardTitle>
-              <CardDescription>Últimas asesorías realizadas</CardDescription>
+              <CardDescription className="text-xs sm:text-sm">Últimas asesorías realizadas</CardDescription>
             </CardHeader>
             <CardContent>
-              <ScrollArea className="h-[500px] pr-4">
+              <ScrollArea className="h-[300px] sm:h-[500px] pr-4">
                 <div className="space-y-4">
                   {historial.map((item, idx) => {
                     const Icon = tipoIcono[item.tipo as keyof typeof tipoIcono];

@@ -56,36 +56,35 @@ export default function StatsCard({
   return (
     <div
       className={cn(
-        'rounded-xl border p-5 transition-all hover:shadow-md',
+        'rounded-xl border p-3 sm:p-5 transition-all hover:shadow-md',
         styles.card,
         className
       )}
     >
-      <div className="flex items-start justify-between">
-        <div className="space-y-1">
-          <p className="text-sm font-medium text-muted-foreground">{title}</p>
-          <p className={cn('text-2xl font-bold tracking-tight', styles.value)}>
+      <div className="flex items-start justify-between gap-2">
+        <div className="space-y-0.5 sm:space-y-1 min-w-0">
+          <p className="text-xs sm:text-sm font-medium text-muted-foreground truncate">{title}</p>
+          <p className={cn('text-lg sm:text-2xl font-bold tracking-tight', styles.value)}>
             {value}
           </p>
           {description && (
-            <p className="text-xs text-muted-foreground">{description}</p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">{description}</p>
           )}
           {trend && (
-            <div className="flex items-center gap-1 pt-1">
+            <div className="flex items-center gap-1 pt-0.5 sm:pt-1">
               <span
                 className={cn(
-                  'text-xs font-medium',
+                  'text-[10px] sm:text-xs font-medium',
                   trend.isPositive ? 'text-success' : 'text-destructive'
                 )}
               >
                 {trend.isPositive ? '↑' : '↓'} {Math.abs(trend.value)}%
               </span>
-              <span className="text-xs text-muted-foreground">vs mes anterior</span>
             </div>
           )}
         </div>
-        <div className={cn('rounded-lg p-2.5', styles.icon)}>
-          <Icon className="h-5 w-5" />
+        <div className={cn('rounded-lg p-1.5 sm:p-2.5 shrink-0', styles.icon)}>
+          <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
         </div>
       </div>
     </div>

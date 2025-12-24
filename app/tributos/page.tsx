@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -29,7 +29,6 @@ import {
   Calendar,
   AlertTriangle,
   Clock,
-  CheckCircle2,
   ChevronRight,
 } from 'lucide-react';
 
@@ -126,39 +125,39 @@ export default function TributosPage() {
         }
       />
       
-      <div className="flex-1 p-6 space-y-6">
+      <div className="flex-1 p-4 sm:p-6 space-y-4 sm:space-y-6">
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
           <Card className="border-l-4 border-l-primary">
-            <CardContent className="pt-4">
+            <CardContent className="pt-3 sm:pt-4 px-3 sm:px-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Total Pendiente</p>
-                  <p className="text-2xl font-bold text-primary">S/ {totalPendiente.toLocaleString()}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Total Pendiente</p>
+                  <p className="text-lg sm:text-2xl font-bold text-primary">S/ {totalPendiente.toLocaleString()}</p>
                 </div>
-                <Wallet className="h-8 w-8 text-primary/50" />
+                <Wallet className="h-6 w-6 sm:h-8 sm:w-8 text-primary/50" />
               </div>
             </CardContent>
           </Card>
           <Card className="border-l-4 border-l-orange-500">
-            <CardContent className="pt-4">
+            <CardContent className="pt-3 sm:pt-4 px-3 sm:px-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Tributos Activos</p>
-                  <p className="text-2xl font-bold text-orange-600">{tributosFiltrados.length}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Tributos Activos</p>
+                  <p className="text-lg sm:text-2xl font-bold text-orange-600">{tributosFiltrados.length}</p>
                 </div>
-                <Calendar className="h-8 w-8 text-orange-500/50" />
+                <Calendar className="h-6 w-6 sm:h-8 sm:w-8 text-orange-500/50" />
               </div>
             </CardContent>
           </Card>
           <Card className="border-l-4 border-l-red-500">
-            <CardContent className="pt-4">
+            <CardContent className="pt-3 sm:pt-4 px-3 sm:px-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Por Vencer (7 días)</p>
-                  <p className="text-2xl font-bold text-red-600">{proximosVencimientos}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Por Vencer (7 días)</p>
+                  <p className="text-lg sm:text-2xl font-bold text-red-600">{proximosVencimientos}</p>
                 </div>
-                <AlertTriangle className="h-8 w-8 text-red-500/50" />
+                <AlertTriangle className="h-6 w-6 sm:h-8 sm:w-8 text-red-500/50" />
               </div>
             </CardContent>
           </Card>
@@ -205,10 +204,11 @@ export default function TributosPage() {
               <Card key={tributo.id}>
                 <Accordion type="single" collapsible>
                   <AccordionItem value="item-1" className="border-0">
-                    <div className="p-6">
-                      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                    <div className="p-4 sm:p-6">
+                      <div className="flex flex-col gap-4">
+                        {/* Header info */}
                         <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
+                          <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
                             <Link href={`/clientes/${tributo.id}`} className="font-semibold hover:text-primary transition-colors">
                               {tributo.cliente}
                             </Link>
@@ -220,49 +220,53 @@ export default function TributosPage() {
                           <code className="text-xs bg-muted px-2 py-1 rounded">RUC: {tributo.ruc}</code>
                         </div>
 
-                        <div className="flex items-center gap-6">
-                          <div className="text-center">
-                            <p className="text-lg font-bold">S/ {tributo.montoTotal.toLocaleString()}</p>
+                        {/* Stats row */}
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                          <div className="text-center p-2 sm:p-3 bg-muted/30 rounded-lg">
+                            <p className="text-sm sm:text-lg font-bold">S/ {tributo.montoTotal.toLocaleString()}</p>
                             <p className="text-xs text-muted-foreground">Monto Total</p>
                           </div>
 
-                          <div className="text-center min-w-[100px]">
+                          <div className="text-center p-2 sm:p-3 bg-muted/30 rounded-lg">
                             <div className="flex items-center justify-center gap-1 mb-1">
-                              <span className="text-lg font-bold">{tributo.cuotasPagadas}</span>
+                              <span className="text-sm sm:text-lg font-bold">{tributo.cuotasPagadas}</span>
                               <span className="text-muted-foreground">/</span>
-                              <span className="text-lg font-bold">{tributo.cuotasTotales}</span>
+                              <span className="text-sm sm:text-lg font-bold">{tributo.cuotasTotales}</span>
                             </div>
-                            <Progress value={progreso} className="h-2 w-20" />
+                            <Progress value={progreso} className="h-2 w-full max-w-[80px] mx-auto" />
                             <p className="text-xs text-muted-foreground mt-1">Cuotas</p>
                           </div>
 
-                          <div className="text-center p-3 bg-muted/50 rounded-lg">
+                          <div className="text-center p-2 sm:p-3 bg-muted/50 rounded-lg">
                             <p className="text-xs text-muted-foreground">Próxima cuota</p>
-                            <p className="font-bold">S/ {tributo.montoCuota}</p>
+                            <p className="font-bold text-sm sm:text-base">S/ {tributo.montoCuota}</p>
                             <p className="text-xs text-muted-foreground">{tributo.proximaCuota.fecha}</p>
                           </div>
 
-                          <AccordionTrigger className="p-0 hover:no-underline">
-                            <Button variant="outline" size="sm" className="gap-1">
-                              Cronograma
-                              <ChevronRight className="h-4 w-4 transition-transform duration-200" />
-                            </Button>
-                          </AccordionTrigger>
+                          <div className="flex items-center justify-center">
+                            <AccordionTrigger className="p-0 hover:no-underline">
+                              <Button variant="outline" size="sm" className="gap-1">
+                                <span className="hidden sm:inline">Cronograma</span>
+                                <span className="sm:hidden">Ver</span>
+                                <ChevronRight className="h-4 w-4 transition-transform duration-200" />
+                              </Button>
+                            </AccordionTrigger>
+                          </div>
                         </div>
                       </div>
                     </div>
 
                     <AccordionContent>
-                      <div className="px-6 pb-6">
+                      <div className="px-4 sm:px-6 pb-4 sm:pb-6">
                         <div className="border rounded-lg overflow-hidden">
-                          <div className="bg-muted/50 px-4 py-2 border-b">
+                          <div className="bg-muted/50 px-3 sm:px-4 py-2 border-b">
                             <p className="text-sm font-medium">Próximas Cuotas</p>
                           </div>
                           <div className="divide-y">
                             {tributo.cuotas.map((cuota) => (
-                              <div key={cuota.numero} className="flex items-center justify-between px-4 py-3">
+                              <div key={cuota.numero} className="flex flex-col sm:flex-row sm:items-center justify-between px-3 sm:px-4 py-3 gap-2 sm:gap-4">
                                 <div className="flex items-center gap-3">
-                                  <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-sm font-medium">
+                                  <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-sm font-medium shrink-0">
                                     {cuota.numero}
                                   </div>
                                   <div>
@@ -270,24 +274,24 @@ export default function TributosPage() {
                                     <p className="text-xs text-muted-foreground">{cuota.fecha}</p>
                                   </div>
                                 </div>
-                                <div className="flex items-center gap-4">
-                                  <span className="font-semibold">S/ {cuota.monto}</span>
-                                  <Badge variant="outline" className="bg-yellow-100 text-yellow-700 border-yellow-200">
+                                <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-4 ml-11 sm:ml-0">
+                                  <span className="font-semibold text-sm">S/ {cuota.monto}</span>
+                                  <Badge variant="outline" className="bg-yellow-100 text-yellow-700 border-yellow-200 text-xs">
                                     <Clock className="h-3 w-3 mr-1" />
                                     Pendiente
                                   </Badge>
-                                  <Button size="sm" variant="outline">Registrar Pago</Button>
+                                  <Button size="sm" variant="outline" className="text-xs">Pagar</Button>
                                 </div>
                               </div>
                             ))}
                           </div>
                         </div>
-                        <div className="mt-4 p-4 bg-muted/30 rounded-lg flex items-center justify-between">
+                        <div className="mt-4 p-3 sm:p-4 bg-muted/30 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                           <div>
                             <p className="text-sm text-muted-foreground">Saldo pendiente</p>
-                            <p className="text-xl font-bold">S/ {pendiente.toLocaleString()}</p>
+                            <p className="text-lg sm:text-xl font-bold">S/ {pendiente.toLocaleString()}</p>
                           </div>
-                          <Button>Ver cronograma completo</Button>
+                          <Button className="w-full sm:w-auto">Ver cronograma completo</Button>
                         </div>
                       </div>
                     </AccordionContent>

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -39,8 +39,6 @@ import {
   Clock,
   AlertCircle,
   CheckCircle2,
-  CreditCard,
-  Calendar,
   DollarSign,
   Info,
 } from 'lucide-react';
@@ -83,52 +81,52 @@ export default function CobranzasPage() {
         subtitle="Gestión de pagos de clientes"
       />
       
-      <div className="flex-1 p-6 space-y-6">
+      <div className="flex-1 p-4 sm:p-6 space-y-4 sm:space-y-6">
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
           <Card className="border-l-4 border-l-yellow-500">
-            <CardContent className="pt-4">
+            <CardContent className="pt-3 sm:pt-4 px-3 sm:px-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Pendiente</p>
-                  <p className="text-2xl font-bold text-yellow-600">S/ {totales.pendiente.toLocaleString()}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Pendiente</p>
+                  <p className="text-lg sm:text-2xl font-bold text-yellow-600">S/ {totales.pendiente.toLocaleString()}</p>
                 </div>
-                <Clock className="h-8 w-8 text-yellow-500/50" />
+                <Clock className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-500/50" />
               </div>
             </CardContent>
           </Card>
           <Card className="border-l-4 border-l-red-500">
-            <CardContent className="pt-4">
+            <CardContent className="pt-3 sm:pt-4 px-3 sm:px-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Vencido</p>
-                  <p className="text-2xl font-bold text-red-600">S/ {totales.vencido.toLocaleString()}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Vencido</p>
+                  <p className="text-lg sm:text-2xl font-bold text-red-600">S/ {totales.vencido.toLocaleString()}</p>
                 </div>
-                <AlertCircle className="h-8 w-8 text-red-500/50" />
+                <AlertCircle className="h-6 w-6 sm:h-8 sm:w-8 text-red-500/50" />
               </div>
             </CardContent>
           </Card>
           <Card className="border-l-4 border-l-green-500">
-            <CardContent className="pt-4">
+            <CardContent className="pt-3 sm:pt-4 px-3 sm:px-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Cobrado</p>
-                  <p className="text-2xl font-bold text-green-600">S/ {totales.cobrado.toLocaleString()}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Cobrado</p>
+                  <p className="text-lg sm:text-2xl font-bold text-green-600">S/ {totales.cobrado.toLocaleString()}</p>
                 </div>
-                <CheckCircle2 className="h-8 w-8 text-green-500/50" />
+                <CheckCircle2 className="h-6 w-6 sm:h-8 sm:w-8 text-green-500/50" />
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="pt-4">
+            <CardContent className="pt-3 sm:pt-4 px-3 sm:px-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground">Tasa de Cobro</p>
-                  <p className="text-2xl font-bold">
+                  <p className="text-xs sm:text-sm text-muted-foreground">Tasa de Cobro</p>
+                  <p className="text-lg sm:text-2xl font-bold">
                     {Math.round((totales.cobrado / (totales.cobrado + totales.pendiente + totales.vencido)) * 100)}%
                   </p>
                 </div>
-                <DollarSign className="h-8 w-8 text-muted-foreground/50" />
+                <DollarSign className="h-6 w-6 sm:h-8 sm:w-8 text-muted-foreground/50" />
               </div>
             </CardContent>
           </Card>
@@ -179,8 +177,8 @@ export default function CobranzasPage() {
           </CardContent>
         </Card>
 
-        {/* Tabla */}
-        <Card>
+        {/* Tabla Desktop */}
+        <Card className="hidden md:block">
           <CardContent className="p-0">
             <Table>
               <TableHeader>
@@ -263,6 +261,85 @@ export default function CobranzasPage() {
             </Table>
           </CardContent>
         </Card>
+
+        {/* Cards Mobile */}
+        <div className="md:hidden space-y-3">
+          {cobranzasFiltradas.map((cob) => {
+            const config = estadoConfig[cob.estado as keyof typeof estadoConfig];
+            const Icon = config.icon;
+            return (
+              <Card key={cob.id}>
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <Link href={`/clientes/${cob.id}`} className="font-medium hover:text-primary transition-colors">
+                        {cob.cliente}
+                      </Link>
+                      <p className="text-xs text-muted-foreground mt-0.5">{cob.ruc}</p>
+                    </div>
+                    <Badge variant="outline" className={config.color}>
+                      <Icon className="h-3 w-3 mr-1" />
+                      {config.label}
+                    </Badge>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-sm mb-3">
+                    <div>
+                      <p className="text-xs text-muted-foreground">Periodo</p>
+                      <p>{cob.periodo}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Monto</p>
+                      <p className="font-semibold">S/ {cob.monto.toLocaleString()}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Vencimiento</p>
+                      <p>{cob.fechaVencimiento}</p>
+                    </div>
+                    {cob.fechaPago && (
+                      <div>
+                        <p className="text-xs text-muted-foreground">Pagado</p>
+                        <p>{cob.fechaPago}</p>
+                      </div>
+                    )}
+                  </div>
+                  {cob.estado !== 'PAGADO' && (
+                    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                      <DialogTrigger asChild>
+                        <Button size="sm" className="w-full">Registrar Pago</Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Registrar Pago</DialogTitle>
+                          <DialogDescription>
+                            {cob.cliente} - {cob.periodo}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                          <div className="grid gap-2">
+                            <Label>Monto</Label>
+                            <Input value={`S/ ${cob.monto}`} disabled />
+                          </div>
+                          <div className="grid gap-2">
+                            <Label>Fecha de Pago</Label>
+                            <Input type="date" defaultValue={new Date().toISOString().split('T')[0]} />
+                          </div>
+                          <div className="grid gap-2">
+                            <Label>Observaciones</Label>
+                            <Input placeholder="Opcional" />
+                          </div>
+                        </div>
+                        <DialogFooter className="flex-col sm:flex-row gap-2">
+                          <Button variant="outline" onClick={() => setDialogOpen(false)} className="w-full sm:w-auto">Cancelar</Button>
+                          <Button onClick={() => setDialogOpen(false)} className="w-full sm:w-auto">Confirmar Pago</Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
