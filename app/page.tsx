@@ -1,65 +1,120 @@
-import Image from "next/image";
+import { Card } from '@/components/ui';
+import Link from 'next/link';
 
-export default function Home() {
+const stats = [
+  { label: 'Clientes Activos', value: '45', icon: '👥', href: '/clientes' },
+  { label: 'Declaraciones Pendientes', value: '12', icon: '📋', href: '/declaraciones' },
+  { label: 'Tributos por Vencer', value: '8', icon: '💰', href: '/tributos' },
+  { label: 'Cobranzas Pendientes', value: '15', icon: '💳', href: '/cobranzas' },
+];
+
+const proximosVencimientos = [
+  { cliente: 'Empresa ABC S.A.C.', tipo: 'PDT 621', fecha: '2025-01-15', estado: 'PENDIENTE' },
+  { cliente: 'Comercial XYZ E.I.R.L.', tipo: 'PLAME', fecha: '2025-01-17', estado: 'EN_PROCESO' },
+  { cliente: 'Servicios 123 S.A.', tipo: 'Fraccionamiento', fecha: '2025-01-20', estado: 'PENDIENTE' },
+];
+
+export default function Dashboard() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-text">Dashboard</h1>
+        <p className="text-text-muted">Bienvenido al CRM KQ Asesores & Contadores</p>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((stat) => (
+          <Link key={stat.label} href={stat.href}>
+            <Card className="hover:shadow-md transition-shadow cursor-pointer">
+              <div className="flex items-center gap-4">
+                <span className="text-3xl">{stat.icon}</span>
+                <div>
+                  <p className="text-2xl font-bold text-primary">{stat.value}</p>
+                  <p className="text-sm text-text-muted">{stat.label}</p>
+                </div>
+              </div>
+            </Card>
+          </Link>
+        ))}
+      </div>
+
+      {/* Próximos Vencimientos */}
+      <Card title="Próximos Vencimientos" action={<Link href="/calendario" className="text-primary hover:underline text-sm">Ver calendario</Link>}>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-border">
+                <th className="text-left py-3 px-4 text-sm font-medium text-text-muted">Cliente</th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-text-muted">Tipo</th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-text-muted">Fecha</th>
+                <th className="text-left py-3 px-4 text-sm font-medium text-text-muted">Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {proximosVencimientos.map((item, idx) => (
+                <tr key={idx} className="border-b border-border last:border-0 hover:bg-bg">
+                  <td className="py-3 px-4 text-sm">{item.cliente}</td>
+                  <td className="py-3 px-4 text-sm">{item.tipo}</td>
+                  <td className="py-3 px-4 text-sm">{item.fecha}</td>
+                  <td className="py-3 px-4">
+                    <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
+                      item.estado === 'PENDIENTE' ? 'bg-yellow-100 text-yellow-800' :
+                      item.estado === 'EN_PROCESO' ? 'bg-blue-100 text-blue-800' :
+                      'bg-green-100 text-green-800'
+                    }`}>
+                      {item.estado.replace('_', ' ')}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </Card>
+
+      {/* Acciones Rápidas */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Card title="Acciones Rápidas">
+          <div className="grid grid-cols-2 gap-3">
+            <Link href="/clientes/nuevo" className="flex items-center gap-2 p-3 rounded-lg bg-bg hover:bg-accent-light transition-colors">
+              <span>➕</span>
+              <span className="text-sm">Nuevo Cliente</span>
+            </Link>
+            <Link href="/asesorias/nueva" className="flex items-center gap-2 p-3 rounded-lg bg-bg hover:bg-accent-light transition-colors">
+              <span>📅</span>
+              <span className="text-sm">Agendar Asesoría</span>
+            </Link>
+            <Link href="/declaraciones" className="flex items-center gap-2 p-3 rounded-lg bg-bg hover:bg-accent-light transition-colors">
+              <span>📋</span>
+              <span className="text-sm">Ver Declaraciones</span>
+            </Link>
+            <Link href="/reportes" className="flex items-center gap-2 p-3 rounded-lg bg-bg hover:bg-accent-light transition-colors">
+              <span>📈</span>
+              <span className="text-sm">Generar Reporte</span>
+            </Link>
+          </div>
+        </Card>
+
+        <Card title="Alertas Recientes">
+          <div className="space-y-3">
+            <div className="flex items-start gap-3 p-3 bg-yellow-50 rounded-lg">
+              <span className="text-yellow-500">⚠️</span>
+              <div>
+                <p className="text-sm font-medium">Tope de ventas próximo</p>
+                <p className="text-xs text-text-muted">Empresa ABC está al 85% del tope RUS</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3 p-3 bg-red-50 rounded-lg">
+              <span className="text-red-500">🔴</span>
+              <div>
+                <p className="text-sm font-medium">Cobranza vencida</p>
+                <p className="text-xs text-text-muted">3 clientes con pagos pendientes</p>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 }
