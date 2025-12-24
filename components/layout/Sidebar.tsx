@@ -22,7 +22,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import {
   Tooltip,
   TooltipContent,
@@ -207,6 +208,9 @@ export function MobileSidebar() {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="p-0 w-72 bg-sidebar text-sidebar-foreground border-sidebar-border">
+        <VisuallyHidden>
+          <SheetTitle>Menú de navegación</SheetTitle>
+        </VisuallyHidden>
         <SidebarContent collapsed={false} onNavigate={() => setOpen(false)} />
       </SheetContent>
     </Sheet>
