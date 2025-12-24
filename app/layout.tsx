@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/layout/Sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,14 +20,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es">
-      <body className={`${geistSans.variable} antialiased`}>
-        <div className="flex min-h-screen">
-          <Sidebar />
-          <main className="flex-1 ml-64 p-6">
-            {children}
-          </main>
-        </div>
+    <html lang="es" suppressHydrationWarning>
+      <body className={`${geistSans.variable} font-sans antialiased`}>
+        <TooltipProvider>
+          <div className="flex min-h-screen bg-background">
+            <Sidebar />
+            <main className="flex-1 ml-64 transition-all duration-300">
+              {children}
+            </main>
+          </div>
+        </TooltipProvider>
       </body>
     </html>
   );

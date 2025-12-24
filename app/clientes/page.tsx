@@ -2,167 +2,152 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Card, Button, Input, Badge } from '@/components/ui';
+import Header from '@/components/layout/Header';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Search, Filter, MoreHorizontal, Eye, Pencil, Phone, Mail, Building2, UserPlus } from 'lucide-react';
 import type { Cliente, RegimenTributario, PlanServicio } from '@/types';
 
-// Datos de ejemplo
 const clientesEjemplo: Cliente[] = [
-  {
-    id: '1',
-    ruc: '20123456789',
-    razonSocial: 'Empresa ABC S.A.C.',
-    titulares: ['Juan Pérez'],
-    email: 'contacto@empresaabc.com',
-    telefono: '999888777',
-    regimenTributario: 'MYPE',
-    regimenLaboral: 'PEQUEÑA',
-    planServicio: 'ESTANDAR',
-    fechaCreacion: new Date('2024-01-15'),
-    activo: true,
-  },
-  {
-    id: '2',
-    ruc: '20987654321',
-    razonSocial: 'Comercial XYZ E.I.R.L.',
-    titulares: ['María García'],
-    email: 'info@comercialxyz.pe',
-    telefono: '998877665',
-    regimenTributario: 'RUS',
-    regimenLaboral: 'MICRO',
-    planServicio: 'BASICO',
-    fechaCreacion: new Date('2024-03-20'),
-    activo: true,
-  },
-  {
-    id: '3',
-    ruc: '20456789123',
-    razonSocial: 'Servicios 123 S.A.',
-    titulares: ['Carlos López', 'Ana Torres'],
-    email: 'admin@servicios123.com',
-    telefono: '997766554',
-    regimenTributario: 'GENERAL',
-    regimenLaboral: 'GENERAL',
-    planServicio: 'PREMIUM',
-    fechaCreacion: new Date('2023-11-10'),
-    activo: true,
-  },
+  { id: '1', ruc: '20123456789', razonSocial: 'Empresa ABC S.A.C.', titulares: ['Juan Pérez'], email: 'contacto@empresaabc.com', telefono: '999888777', regimenTributario: 'MYPE', regimenLaboral: 'PEQUEÑA', planServicio: 'ESTANDAR', fechaCreacion: new Date(), activo: true },
+  { id: '2', ruc: '20987654321', razonSocial: 'Comercial XYZ E.I.R.L.', titulares: ['María García'], email: 'info@comercialxyz.pe', telefono: '998877665', regimenTributario: 'RUS', regimenLaboral: 'MICRO', planServicio: 'BASICO', fechaCreacion: new Date(), activo: true },
 ];
 
-const regimenColors: Record<RegimenTributario, string> = {
-  RUS: 'bg-green-100 text-green-800',
-  RER: 'bg-blue-100 text-blue-800',
-  MYPE: 'bg-purple-100 text-purple-800',
-  GENERAL: 'bg-orange-100 text-orange-800',
+const regimenConfig: Record<RegimenTributario, { label: string; color: string }> = {
+  RUS: { label: 'RUS', color: 'bg-emerald-100 text-emerald-700' },
+  RER: { label: 'RER', color: 'bg-blue-100 text-blue-700' },
+  MYPE: { label: 'MYPE', color: 'bg-violet-100 text-violet-700' },
+  GENERAL: { label: 'General', color: 'bg-amber-100 text-amber-700' },
 };
 
-const planColors: Record<PlanServicio, string> = {
-  BASICO: 'bg-gray-100 text-gray-800',
-  ESTANDAR: 'bg-blue-100 text-blue-800',
-  PREMIUM: 'bg-purple-100 text-purple-800',
-  ENTERPRISE: 'bg-yellow-100 text-yellow-800',
+const planConfig: Record<PlanServicio, { label: string; color: string }> = {
+  BASICO: { label: 'Básico', color: 'bg-slate-100 text-slate-700' },
+  ESTANDAR: { label: 'Estándar', color: 'bg-blue-100 text-blue-700' },
+  PREMIUM: { label: 'Premium', color: 'bg-purple-100 text-purple-700' },
+  ENTERPRISE: { label: 'Enterprise', color: 'bg-amber-100 text-amber-700' },
 };
 
 export default function ClientesPage() {
   const [busqueda, setBusqueda] = useState('');
-  const [filtroRegimen, setFiltroRegimen] = useState<string>('');
+  const [filtroRegimen, setFiltroRegimen] = useState<string>('all');
 
-  const clientesFiltrados = clientesEjemplo.filter((cliente) => {
-    const matchBusqueda = 
-      cliente.razonSocial.toLowerCase().includes(busqueda.toLowerCase()) ||
-      cliente.ruc.includes(busqueda);
-    const matchRegimen = !filtroRegimen || cliente.regimenTributario === filtroRegimen;
+  const clientesFiltrados = clientesEjemplo.filter((c) => {
+    const matchBusqueda = c.razonSocial.toLowerCase().includes(busqueda.toLowerCase());
+    const matchRegimen = filtroRegimen === 'all' || c.regimenTributario === filtroRegimen;
     return matchBusqueda && matchRegimen;
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-text">Clientes</h1>
-        <Link href="/clientes/nuevo">
-          <Button>+ Nuevo Cliente</Button>
-        </Link>
+    <div className="flex flex-col min-h-screen">
+      <Header title="Clientes" subtitle={`${clientesFiltrados.length} clientes`} 
+        actions={<Button asChild><Link href="/clientes/nuevo"><UserPlus className="h-4 w-4 mr-2" />Nuevo</Link></Button>} />
+      <div className="flex-1 p-6 space-y-4">
+        <Card>
+          <CardContent className="p-4 flex gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input placeholder="Buscar..." value={busqueda} onChange={(e) => setBusqueda(e.target.value)} className="pl-9" />
+            </div>
+            <Select value={filtroRegimen} onValueChange={setFiltroRegimen}>
+              <SelectTrigger className="w-[160px]"><Filter className="h-4 w-4 mr-2" /><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos</SelectItem>
+                <SelectItem value="RUS">RUS</SelectItem>
+                <SelectItem value="MYPE">MYPE</SelectItem>
+              </SelectContent>
+            </Select>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-muted/50">
+                  <TableHead>Cliente</TableHead>
+                  <TableHead>RUC</TableHead>
+                  <TableHead>Régimen</TableHead>
+                  <TableHead>Plan</TableHead>
+                  <TableHead>Contacto</TableHead>
+                  <TableHead className="text-right">Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {clientesFiltrados.map((c) => (
+                  <TableRow key={c.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-10 w-10">
+                          <AvatarFallback className="bg-primary/10 text-primary">
+                            {c.razonSocial.substring(0, 2).toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <Link href={`/clientes/${c.id}`} className="font-medium hover:text-primary">
+                            {c.razonSocial}
+                          </Link>
+                          <p className="text-xs text-muted-foreground">{c.titulares.join(', ')}</p>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell><code className="text-sm bg-muted px-2 py-1 rounded">{c.ruc}</code></TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className={regimenConfig[c.regimenTributario].color}>
+                        {regimenConfig[c.regimenTributario].label}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="secondary" className={planConfig[c.planServicio].color}>
+                        {planConfig[c.planServicio].label}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex gap-1">
+                        <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+                          <a href={`tel:${c.telefono}`}><Phone className="h-4 w-4" /></a>
+                        </Button>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
+                          <a href={`mailto:${c.email}`}><Mail className="h-4 w-4" /></a>
+                        </Button>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-8 w-8">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem asChild>
+                            <Link href={`/clientes/${c.id}`}><Eye className="h-4 w-4 mr-2" />Ver</Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link href={`/clientes/${c.id}/editar`}><Pencil className="h-4 w-4 mr-2" />Editar</Link>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+            {clientesFiltrados.length === 0 && (
+              <div className="flex flex-col items-center justify-center py-12">
+                <Building2 className="h-12 w-12 text-muted-foreground/50 mb-4" />
+                <p className="text-muted-foreground">No se encontraron clientes</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
-
-      {/* Filtros */}
-      <Card>
-        <div className="flex flex-wrap gap-4">
-          <div className="flex-1 min-w-[200px]">
-            <Input
-              placeholder="Buscar por RUC o razón social..."
-              value={busqueda}
-              onChange={(e) => setBusqueda(e.target.value)}
-            />
-          </div>
-          <select
-            className="px-3 py-2 border border-border rounded-lg bg-bg-white"
-            value={filtroRegimen}
-            onChange={(e) => setFiltroRegimen(e.target.value)}
-          >
-            <option value="">Todos los regímenes</option>
-            <option value="RUS">RUS</option>
-            <option value="RER">RER</option>
-            <option value="MYPE">MYPE</option>
-            <option value="GENERAL">General</option>
-          </select>
-        </div>
-      </Card>
-
-      {/* Lista de Clientes */}
-      <Card>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-border">
-                <th className="text-left py-3 px-4 text-sm font-medium text-text-muted">RUC</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-text-muted">Razón Social</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-text-muted">Régimen</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-text-muted">Plan</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-text-muted">Contacto</th>
-                <th className="text-left py-3 px-4 text-sm font-medium text-text-muted">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {clientesFiltrados.map((cliente) => (
-                <tr key={cliente.id} className="border-b border-border last:border-0 hover:bg-bg">
-                  <td className="py-3 px-4 text-sm font-mono">{cliente.ruc}</td>
-                  <td className="py-3 px-4">
-                    <Link href={`/clientes/${cliente.id}`} className="text-primary hover:underline font-medium">
-                      {cliente.razonSocial}
-                    </Link>
-                  </td>
-                  <td className="py-3 px-4">
-                    <span className={`inline-flex px-2 py-1 text-xs rounded-full ${regimenColors[cliente.regimenTributario]}`}>
-                      {cliente.regimenTributario}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4">
-                    <span className={`inline-flex px-2 py-1 text-xs rounded-full ${planColors[cliente.planServicio]}`}>
-                      {cliente.planServicio}
-                    </span>
-                  </td>
-                  <td className="py-3 px-4 text-sm text-text-muted">{cliente.telefono}</td>
-                  <td className="py-3 px-4">
-                    <div className="flex gap-2">
-                      <Link href={`/clientes/${cliente.id}`}>
-                        <Button variant="outline" size="sm">Ver</Button>
-                      </Link>
-                      <Link href={`/clientes/${cliente.id}/editar`}>
-                        <Button variant="secondary" size="sm">Editar</Button>
-                      </Link>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        
-        {clientesFiltrados.length === 0 && (
-          <div className="text-center py-8 text-text-muted">
-            No se encontraron clientes con los filtros aplicados.
-          </div>
-        )}
-      </Card>
     </div>
   );
 }

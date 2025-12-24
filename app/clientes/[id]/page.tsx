@@ -2,9 +2,35 @@
 
 import { use } from 'react';
 import Link from 'next/link';
-import { Card, Button, Badge } from '@/components/ui';
+import Header from '@/components/layout/Header';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import {
+  ArrowLeft,
+  Pencil,
+  Phone,
+  Mail,
+  Building2,
+  FileText,
+  Wallet,
+  Briefcase,
+  CreditCard,
+  MessageSquare,
+  Clock,
+  CheckCircle2,
+  AlertCircle,
+  TrendingUp,
+  Calendar,
+  Plus,
+  ExternalLink,
+} from 'lucide-react';
 
-// Datos de ejemplo
 const clienteEjemplo = {
   id: '1',
   ruc: '20123456789',
@@ -12,181 +38,353 @@ const clienteEjemplo = {
   titulares: ['Juan Pérez', 'María López'],
   email: 'contacto@empresaabc.com',
   telefono: '999888777',
+  direccion: 'Av. Principal 123, Lima',
   regimenTributario: 'MYPE',
   regimenLaboral: 'PEQUEÑA',
-  otrosRegistros: 'Registro REMYPE vigente',
+  otrosRegistros: 'Registro REMYPE vigente hasta 2026',
   planServicio: 'ESTANDAR',
   fechaCreacion: new Date('2024-01-15'),
   activo: true,
+  asesoriasUsadas: 2,
+  asesoriasDisponibles: 4,
 };
 
 const interacciones = [
-  { fecha: '2025-01-10', tipo: 'CONSULTA', descripcion: 'Consulta sobre declaración mensual', responsable: 'Ana Torres', rol: 'CONTADOR' },
-  { fecha: '2025-01-05', tipo: 'GESTION', descripcion: 'Presentación PDT 621 diciembre', responsable: 'Carlos Ruiz', rol: 'ASISTENTE' },
-  { fecha: '2024-12-20', tipo: 'COMENTARIO', descripcion: 'Cliente solicita asesoría tributaria', responsable: 'Ana Torres', rol: 'CONTADOR' },
+  { id: 1, fecha: '10 Ene 2025', tipo: 'CONSULTA', descripcion: 'Consulta sobre declaración mensual de enero', responsable: 'Ana Torres', rol: 'Contador' },
+  { id: 2, fecha: '05 Ene 2025', tipo: 'GESTION', descripcion: 'Presentación PDT 621 diciembre 2024', responsable: 'Carlos Ruiz', rol: 'Asistente' },
+  { id: 3, fecha: '20 Dic 2024', tipo: 'ASESORIA', descripcion: 'Asesoría tributaria - Planificación fiscal 2025', responsable: 'Ana Torres', rol: 'Contador' },
+  { id: 4, fecha: '15 Dic 2024', tipo: 'COMENTARIO', descripcion: 'Cliente solicita información sobre fraccionamiento', responsable: 'Carlos Ruiz', rol: 'Asistente' },
 ];
 
 const declaraciones = [
-  { periodo: '2025-01', tipo: 'PDT 621', estado: 'PENDIENTE' },
-  { periodo: '2025-01', tipo: 'PLAME', estado: 'PENDIENTE' },
-  { periodo: '2024-12', tipo: 'PDT 621', estado: 'PRESENTADO' },
-  { periodo: '2024-12', tipo: 'PLAME', estado: 'PRESENTADO' },
+  { periodo: 'Enero 2025', tipo: 'PDT 621', estado: 'PENDIENTE', vencimiento: '15 Feb 2025' },
+  { periodo: 'Enero 2025', tipo: 'PLAME', estado: 'PENDIENTE', vencimiento: '17 Feb 2025' },
+  { periodo: 'Diciembre 2024', tipo: 'PDT 621', estado: 'PRESENTADO', fechaPresentacion: '12 Ene 2025' },
+  { periodo: 'Diciembre 2024', tipo: 'PLAME', estado: 'PRESENTADO', fechaPresentacion: '14 Ene 2025' },
+];
+
+const tributos = [
+  { tipo: 'Fraccionamiento Art. 36', monto: 'S/ 500', vencimiento: '20 Ene 2025', cuota: '9/24' },
+  { tipo: 'IGV Enero', monto: 'S/ 1,200', vencimiento: '17 Feb 2025', cuota: '-' },
+];
+
+const cobranzas = [
+  { periodo: 'Diciembre 2024', monto: 'S/ 850', estado: 'PAGADO', fecha: '25 Dic 2024' },
+  { periodo: 'Noviembre 2024', monto: 'S/ 850', estado: 'PAGADO', fecha: '25 Nov 2024' },
 ];
 
 export default function ClienteDetallePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
 
+  const tipoIcono = {
+    CONSULTA: MessageSquare,
+    GESTION: FileText,
+    ASESORIA: Briefcase,
+    COMENTARIO: Clock,
+  };
+
+  const tipoColor = {
+    CONSULTA: 'bg-blue-100 text-blue-600',
+    GESTION: 'bg-green-100 text-green-600',
+    ASESORIA: 'bg-purple-100 text-purple-600',
+    COMENTARIO: 'bg-slate-100 text-slate-600',
+  };
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link href="/clientes" className="text-text-muted hover:text-text">
-            ← Volver
-          </Link>
-          <h1 className="text-2xl font-bold text-text">{clienteEjemplo.razonSocial}</h1>
-          <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Activo</span>
-        </div>
-        <div className="flex gap-2">
-          <Link href={`/clientes/${id}/editar`}>
-            <Button variant="outline">Editar</Button>
-          </Link>
-          <Button>+ Nueva Interacción</Button>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Información General */}
-        <Card title="Información General" className="lg:col-span-1">
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm text-text-muted">RUC</p>
-              <p className="font-mono font-medium">{clienteEjemplo.ruc}</p>
-            </div>
-            <div>
-              <p className="text-sm text-text-muted">Titulares</p>
-              <p>{clienteEjemplo.titulares.join(', ')}</p>
-            </div>
-            <div>
-              <p className="text-sm text-text-muted">Email</p>
-              <p>{clienteEjemplo.email}</p>
-            </div>
-            <div>
-              <p className="text-sm text-text-muted">Teléfono</p>
-              <p>{clienteEjemplo.telefono}</p>
-            </div>
-            <div className="pt-4 border-t border-border">
-              <p className="text-sm text-text-muted">Régimen Tributario</p>
-              <span className="inline-flex px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800 mt-1">
-                {clienteEjemplo.regimenTributario}
-              </span>
-            </div>
-            <div>
-              <p className="text-sm text-text-muted">Régimen Laboral</p>
-              <span className="inline-flex px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 mt-1">
-                {clienteEjemplo.regimenLaboral}
-              </span>
-            </div>
-            <div>
-              <p className="text-sm text-text-muted">Plan de Servicio</p>
-              <span className="inline-flex px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 mt-1">
-                {clienteEjemplo.planServicio}
-              </span>
-            </div>
-            {clienteEjemplo.otrosRegistros && (
-              <div>
-                <p className="text-sm text-text-muted">Otros Registros</p>
-                <p className="text-sm">{clienteEjemplo.otrosRegistros}</p>
-              </div>
-            )}
+    <div className="flex flex-col min-h-screen">
+      <Header 
+        title={clienteEjemplo.razonSocial}
+        subtitle={`RUC: ${clienteEjemplo.ruc}`}
+        actions={
+          <div className="flex gap-2">
+            <Button variant="outline" asChild>
+              <Link href={`/clientes/${id}/editar`} className="gap-2">
+                <Pencil className="h-4 w-4" />
+                Editar
+              </Link>
+            </Button>
+            <Button className="gap-2">
+              <Plus className="h-4 w-4" />
+              Nueva Interacción
+            </Button>
           </div>
-        </Card>
+        }
+      />
+      
+      <div className="flex-1 p-6">
+        <div className="mb-4">
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/clientes" className="gap-2 text-muted-foreground">
+              <ArrowLeft className="h-4 w-4" />
+              Volver a clientes
+            </Link>
+          </Button>
+        </div>
 
-        {/* Historial de Interacciones */}
-        <Card title="Historial de Interacciones" className="lg:col-span-2">
-          <div className="space-y-4">
-            {interacciones.map((item, idx) => (
-              <div key={idx} className="flex gap-4 p-4 bg-bg rounded-lg">
-                <div className="flex-shrink-0">
-                  <span className={`inline-flex w-8 h-8 items-center justify-center rounded-full text-sm ${
-                    item.tipo === 'CONSULTA' ? 'bg-blue-100 text-blue-600' :
-                    item.tipo === 'GESTION' ? 'bg-green-100 text-green-600' :
-                    'bg-gray-100 text-gray-600'
-                  }`}>
-                    {item.tipo === 'CONSULTA' ? '❓' : item.tipo === 'GESTION' ? '✅' : '💬'}
-                  </span>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Columna izquierda - Info del cliente */}
+          <div className="space-y-6">
+            {/* Tarjeta de perfil */}
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex flex-col items-center text-center mb-6">
+                  <Avatar className="h-20 w-20 mb-4">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-bold">
+                      EA
+                    </AvatarFallback>
+                  </Avatar>
+                  <h2 className="font-semibold text-lg">{clienteEjemplo.razonSocial}</h2>
+                  <Badge variant="outline" className="mt-2 bg-emerald-50 text-emerald-700 border-emerald-200">
+                    Cliente Activo
+                  </Badge>
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-medium text-sm">{item.tipo}</span>
-                    <span className="text-xs text-text-muted">{item.fecha}</span>
+
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 text-sm">
+                    <div className="h-8 w-8 rounded-lg bg-muted flex items-center justify-center">
+                      <Building2 className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground text-xs">RUC</p>
+                      <p className="font-mono font-medium">{clienteEjemplo.ruc}</p>
+                    </div>
                   </div>
-                  <p className="text-sm text-text-muted">{item.descripcion}</p>
-                  <p className="text-xs text-text-muted mt-1">
-                    {item.responsable} ({item.rol})
-                  </p>
+                  <div className="flex items-center gap-3 text-sm">
+                    <div className="h-8 w-8 rounded-lg bg-muted flex items-center justify-center">
+                      <Phone className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground text-xs">Teléfono</p>
+                      <p className="font-medium">{clienteEjemplo.telefono}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm">
+                    <div className="h-8 w-8 rounded-lg bg-muted flex items-center justify-center">
+                      <Mail className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground text-xs">Email</p>
+                      <p className="font-medium">{clienteEjemplo.email}</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </Card>
-      </div>
 
-      {/* Tabs de información adicional */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Declaraciones */}
-        <Card title="Declaraciones Recientes">
-          <div className="space-y-2">
-            {declaraciones.map((dec, idx) => (
-              <div key={idx} className="flex items-center justify-between p-3 bg-bg rounded-lg">
-                <div>
-                  <p className="font-medium text-sm">{dec.tipo}</p>
-                  <p className="text-xs text-text-muted">Periodo: {dec.periodo}</p>
+                <Separator className="my-4" />
+
+                <div className="grid grid-cols-2 gap-4 text-center">
+                  <div className="p-3 rounded-lg bg-muted/50">
+                    <p className="text-xs text-muted-foreground">Régimen Tributario</p>
+                    <Badge className="mt-1 bg-violet-100 text-violet-700">
+                      {clienteEjemplo.regimenTributario}
+                    </Badge>
+                  </div>
+                  <div className="p-3 rounded-lg bg-muted/50">
+                    <p className="text-xs text-muted-foreground">Plan</p>
+                    <Badge className="mt-1 bg-blue-100 text-blue-700">
+                      {clienteEjemplo.planServicio}
+                    </Badge>
+                  </div>
                 </div>
-                <span className={`px-2 py-1 text-xs rounded-full ${
-                  dec.estado === 'PENDIENTE' ? 'bg-yellow-100 text-yellow-800' :
-                  dec.estado === 'EN_PROCESO' ? 'bg-blue-100 text-blue-800' :
-                  'bg-green-100 text-green-800'
-                }`}>
-                  {dec.estado}
-                </span>
-              </div>
-            ))}
-          </div>
-          <Link href={`/clientes/${id}/declaraciones`} className="block text-center text-primary text-sm mt-4 hover:underline">
-            Ver todas las declaraciones →
-          </Link>
-        </Card>
+              </CardContent>
+            </Card>
 
-        {/* Accesos Rápidos */}
-        <Card title="Accesos Rápidos">
-          <div className="grid grid-cols-2 gap-3">
-            <Link href={`/clientes/${id}/sunat`} className="flex items-center gap-2 p-3 rounded-lg bg-bg hover:bg-accent-light transition-colors">
-              <span>🏛️</span>
-              <span className="text-sm">Estado SUNAT</span>
-            </Link>
-            <Link href={`/clientes/${id}/afp`} className="flex items-center gap-2 p-3 rounded-lg bg-bg hover:bg-accent-light transition-colors">
-              <span>💼</span>
-              <span className="text-sm">Estado AFP</span>
-            </Link>
-            <Link href={`/clientes/${id}/tributos`} className="flex items-center gap-2 p-3 rounded-lg bg-bg hover:bg-accent-light transition-colors">
-              <span>💰</span>
-              <span className="text-sm">Tributos</span>
-            </Link>
-            <Link href={`/clientes/${id}/ventas`} className="flex items-center gap-2 p-3 rounded-lg bg-bg hover:bg-accent-light transition-colors">
-              <span>📊</span>
-              <span className="text-sm">Ventas</span>
-            </Link>
-            <Link href={`/clientes/${id}/asesorias`} className="flex items-center gap-2 p-3 rounded-lg bg-bg hover:bg-accent-light transition-colors">
-              <span>📅</span>
-              <span className="text-sm">Asesorías</span>
-            </Link>
-            <Link href={`/clientes/${id}/cobranzas`} className="flex items-center gap-2 p-3 rounded-lg bg-bg hover:bg-accent-light transition-colors">
-              <span>💳</span>
-              <span className="text-sm">Cobranzas</span>
-            </Link>
+            {/* Asesorías */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Briefcase className="h-4 w-4" />
+                  Asesorías del Mes
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-2xl font-bold">{clienteEjemplo.asesoriasUsadas}</span>
+                  <span className="text-muted-foreground">de {clienteEjemplo.asesoriasDisponibles}</span>
+                </div>
+                <Progress 
+                  value={(clienteEjemplo.asesoriasUsadas / clienteEjemplo.asesoriasDisponibles) * 100} 
+                  className="h-2"
+                />
+                <p className="text-xs text-muted-foreground mt-2">
+                  {clienteEjemplo.asesoriasDisponibles - clienteEjemplo.asesoriasUsadas} asesorías disponibles
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Accesos rápidos */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-base">Accesos Rápidos</CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-2 gap-2">
+                <Button variant="outline" size="sm" className="justify-start gap-2 h-auto py-3">
+                  <Building2 className="h-4 w-4 text-primary" />
+                  <span className="text-xs">SUNAT</span>
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start gap-2 h-auto py-3">
+                  <Wallet className="h-4 w-4 text-primary" />
+                  <span className="text-xs">AFP</span>
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start gap-2 h-auto py-3">
+                  <TrendingUp className="h-4 w-4 text-primary" />
+                  <span className="text-xs">Ventas</span>
+                </Button>
+                <Button variant="outline" size="sm" className="justify-start gap-2 h-auto py-3">
+                  <ExternalLink className="h-4 w-4 text-primary" />
+                  <span className="text-xs">Drive</span>
+                </Button>
+              </CardContent>
+            </Card>
           </div>
-        </Card>
+
+          {/* Columna derecha - Tabs */}
+          <div className="lg:col-span-2">
+            <Tabs defaultValue="historial" className="w-full">
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="historial">Historial</TabsTrigger>
+                <TabsTrigger value="declaraciones">Declaraciones</TabsTrigger>
+                <TabsTrigger value="tributos">Tributos</TabsTrigger>
+                <TabsTrigger value="cobranzas">Cobranzas</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="historial" className="mt-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Historial de Interacciones</CardTitle>
+                    <CardDescription>Registro de todas las gestiones realizadas</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ScrollArea className="h-[400px] pr-4">
+                      <div className="space-y-4">
+                        {interacciones.map((item) => {
+                          const Icon = tipoIcono[item.tipo as keyof typeof tipoIcono];
+                          const color = tipoColor[item.tipo as keyof typeof tipoColor];
+                          return (
+                            <div key={item.id} className="flex gap-4 p-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+                              <div className={`h-10 w-10 rounded-lg flex items-center justify-center shrink-0 ${color}`}>
+                                <Icon className="h-5 w-5" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center justify-between mb-1">
+                                  <Badge variant="outline" className="text-xs">
+                                    {item.tipo}
+                                  </Badge>
+                                  <span className="text-xs text-muted-foreground">{item.fecha}</span>
+                                </div>
+                                <p className="text-sm">{item.descripcion}</p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {item.responsable} • {item.rol}
+                                </p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="declaraciones" className="mt-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Declaraciones</CardTitle>
+                    <CardDescription>Estado de declaraciones mensuales</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {declaraciones.map((dec, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-4 rounded-lg border">
+                          <div className="flex items-center gap-3">
+                            <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${
+                              dec.estado === 'PRESENTADO' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'
+                            }`}>
+                              {dec.estado === 'PRESENTADO' ? <CheckCircle2 className="h-5 w-5" /> : <Clock className="h-5 w-5" />}
+                            </div>
+                            <div>
+                              <p className="font-medium text-sm">{dec.tipo}</p>
+                              <p className="text-xs text-muted-foreground">{dec.periodo}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <Badge variant={dec.estado === 'PRESENTADO' ? 'default' : 'secondary'}>
+                              {dec.estado === 'PRESENTADO' ? 'Presentado' : 'Pendiente'}
+                            </Badge>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {dec.estado === 'PRESENTADO' ? dec.fechaPresentacion : `Vence: ${dec.vencimiento}`}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="tributos" className="mt-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Tributos Pendientes</CardTitle>
+                    <CardDescription>Cronograma de pagos</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {tributos.map((trib, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-4 rounded-lg border">
+                          <div className="flex items-center gap-3">
+                            <div className="h-10 w-10 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center">
+                              <Wallet className="h-5 w-5" />
+                            </div>
+                            <div>
+                              <p className="font-medium text-sm">{trib.tipo}</p>
+                              <p className="text-xs text-muted-foreground">Cuota: {trib.cuota}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-semibold">{trib.monto}</p>
+                            <p className="text-xs text-muted-foreground">Vence: {trib.vencimiento}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="cobranzas" className="mt-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Historial de Cobranzas</CardTitle>
+                    <CardDescription>Pagos de servicios contables</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {cobranzas.map((cob, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-4 rounded-lg border">
+                          <div className="flex items-center gap-3">
+                            <div className="h-10 w-10 rounded-lg bg-green-100 text-green-600 flex items-center justify-center">
+                              <CreditCard className="h-5 w-5" />
+                            </div>
+                            <div>
+                              <p className="font-medium text-sm">{cob.periodo}</p>
+                              <p className="text-xs text-muted-foreground">Pagado: {cob.fecha}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-semibold">{cob.monto}</p>
+                            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                              {cob.estado}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
       </div>
     </div>
   );

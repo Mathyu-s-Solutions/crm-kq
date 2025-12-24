@@ -2,64 +2,200 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import {
+  LayoutDashboard,
+  Users,
+  Calendar,
+  FileText,
+  Wallet,
+  Briefcase,
+  CreditCard,
+  BarChart3,
+  Settings,
+  HelpCircle,
+  ChevronLeft,
+  Building2,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { useState } from 'react';
 
-const menuItems = [
-  { href: '/', label: 'Dashboard', icon: '📊' },
-  { href: '/clientes', label: 'Clientes', icon: '👥' },
-  { href: '/calendario', label: 'Calendario', icon: '📅' },
-  { href: '/declaraciones', label: 'Declaraciones', icon: '📋' },
-  { href: '/tributos', label: 'Tributos', icon: '💰' },
-  { href: '/asesorias', label: 'Asesorías', icon: '💼' },
-  { href: '/cobranzas', label: 'Cobranzas', icon: '💳' },
-  { href: '/reportes', label: 'Reportes', icon: '📈' },
+const mainNavItems = [
+  { href: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/clientes', label: 'Clientes', icon: Users },
+  { href: '/calendario', label: 'Calendario', icon: Calendar },
+  { href: '/declaraciones', label: 'Declaraciones', icon: FileText },
+  { href: '/tributos', label: 'Tributos', icon: Wallet },
+  { href: '/asesorias', label: 'Asesorías', icon: Briefcase },
+  { href: '/cobranzas', label: 'Cobranzas', icon: CreditCard },
+  { href: '/reportes', label: 'Reportes', icon: BarChart3 },
+];
+
+const secondaryNavItems = [
+  { href: '/configuracion', label: 'Configuración', icon: Settings },
+  { href: '/ayuda', label: 'Ayuda', icon: HelpCircle },
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-primary text-white flex flex-col">
-      <div className="p-6 border-b border-primary-light">
-        <h1 className="text-xl font-bold">KQ Asesores</h1>
-        <p className="text-sm text-accent-light opacity-80">& Contadores</p>
-      </div>
-      
-      <nav className="flex-1 py-4">
-        <ul className="space-y-1">
-          {menuItems.map((item) => {
-            const isActive = pathname === item.href || 
-              (item.href !== '/' && pathname.startsWith(item.href));
-            
-            return (
-              <li key={item.href}>
+    <TooltipProvider delayDuration={0}>
+      <aside
+        className={cn(
+          'fixed left-0 top-0 z-40 h-screen bg-sidebar text-sidebar-foreground transition-all duration-300 ease-in-out flex flex-col',
+          collapsed ? 'w-[70px]' : 'w-64'
+        )}
+      >
+        {/* Logo */}
+        <div className={cn(
+          'flex items-center h-16 px-4 border-b border-sidebar-border',
+          collapsed ? 'justify-center' : 'justify-between'
+        )}>
+          <Link href="/" className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+              <Building2 className="h-5 w-5" />
+            </div>
+            {!collapsed && (
+              <div className="flex flex-col">
+                <span className="font-bold text-base leading-tight">KQ Asesores</span>
+                <span className="text-xs text-sidebar-foreground/70">& Contadores</span>
+              </div>
+            )}
+          </Link>
+          {!collapsed && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
+              onClick={() => setCollapsed(true)}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+
+        {/* Navigation */}
+        <ScrollArea className="flex-1 py-4">
+          <nav className="space-y-1 px-2">
+            {mainNavItems.map((item) => {
+              const isActive = pathname === item.href || 
+                (item.href !== '/' && pathname.startsWith(item.href));
+              const Icon = item.icon;
+
+              const linkContent = (
                 <Link
                   href={item.href}
-                  className={`flex items-center gap-3 px-6 py-3 transition-colors ${
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all',
                     isActive
-                      ? 'bg-primary-dark text-white'
-                      : 'text-accent-light hover:bg-primary-dark hover:text-white'
-                  }`}
+                      ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                      : 'text-sidebar-foreground/80 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground',
+                    collapsed && 'justify-center px-2'
+                  )}
                 >
-                  <span className="text-lg">{item.icon}</span>
-                  <span>{item.label}</span>
+                  <Icon className={cn('h-5 w-5 shrink-0', isActive && 'text-sidebar-primary')} />
+                  {!collapsed && <span>{item.label}</span>}
                 </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
+              );
 
-      <div className="p-4 border-t border-primary-light">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-primary font-bold">
-            U
+              if (collapsed) {
+                return (
+                  <Tooltip key={item.href}>
+                    <TooltipTrigger asChild>
+                      {linkContent}
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="font-medium">
+                      {item.label}
+                    </TooltipContent>
+                  </Tooltip>
+                );
+              }
+
+              return <div key={item.href}>{linkContent}</div>;
+            })}
+          </nav>
+
+          <Separator className="my-4 bg-sidebar-border" />
+
+          <nav className="space-y-1 px-2">
+            {secondaryNavItems.map((item) => {
+              const Icon = item.icon;
+              const linkContent = (
+                <Link
+                  href={item.href}
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all',
+                    'text-sidebar-foreground/60 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground',
+                    collapsed && 'justify-center px-2'
+                  )}
+                >
+                  <Icon className="h-5 w-5 shrink-0" />
+                  {!collapsed && <span>{item.label}</span>}
+                </Link>
+              );
+
+              if (collapsed) {
+                return (
+                  <Tooltip key={item.href}>
+                    <TooltipTrigger asChild>
+                      {linkContent}
+                    </TooltipTrigger>
+                    <TooltipContent side="right" className="font-medium">
+                      {item.label}
+                    </TooltipContent>
+                  </Tooltip>
+                );
+              }
+
+              return <div key={item.href}>{linkContent}</div>;
+            })}
+          </nav>
+        </ScrollArea>
+
+        {/* Collapse button when collapsed */}
+        {collapsed && (
+          <div className="p-2 border-t border-sidebar-border">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-full h-10 text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
+                  onClick={() => setCollapsed(false)}
+                >
+                  <ChevronLeft className="h-4 w-4 rotate-180" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">Expandir menú</TooltipContent>
+            </Tooltip>
           </div>
-          <div>
-            <p className="text-sm font-medium">Usuario</p>
-            <p className="text-xs text-accent-light">Contador</p>
+        )}
+
+        {/* User section */}
+        {!collapsed && (
+          <div className="p-4 border-t border-sidebar-border">
+            <div className="flex items-center gap-3">
+              <div className="h-9 w-9 rounded-full bg-sidebar-primary flex items-center justify-center text-sidebar-primary-foreground font-semibold text-sm">
+                AC
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium truncate">Alessandro C.</p>
+                <p className="text-xs text-sidebar-foreground/60 truncate">Contador Principal</p>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </aside>
+        )}
+      </aside>
+    </TooltipProvider>
   );
 }
